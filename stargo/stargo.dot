@@ -1,0 +1,27 @@
+digraph stargo {
+    rankdir=BT
+
+    node [
+        shape = "record"
+    ]
+
+    ITask [
+        label = "{《interface》\lITask||}"
+    ]
+
+    IDag [
+        label = "{《interface》\lIDag||}"
+    ]
+
+    Task [
+        label = "{Task||}"
+    ]
+
+    Dag [
+        label = "{Dag||}"
+    ]
+
+    Task -> ITask [style=dashed arrowhead=empty]
+    Dag -> IDag [style=dashed arrowhead=empty]
+
+}
