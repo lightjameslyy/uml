@@ -10,14 +10,12 @@ digraph stargo {
     ]
 
     note01 [
-        label = "\llanguage: Golang\l\lSymbols:\l+: public\l-: package\lT: interface{}\l"
+        label = "\llanguage: Golang\l\lSymbols:\l+: public\l-: package\lT: interface{}\lF: func(T) T\l"
     ]
 
     node [
         shape = "record"
     ]
-
-    State 
 
     IQueue [
         label = "{\<\<interface\>\>\nIQueue||+Push(T)\l+Pop(): T\l+Empty(): bool\l+Size(): int\l}"
@@ -28,11 +26,11 @@ digraph stargo {
     ]
 
     ITask [
-        label = "{\<\<interface\>\>\nITask||+Process(): (T, error)\l+State(): T\l}"
+        label = "{\<\<interface\>\>\nITask||+Process(): (T, error)\l+State(): T\l+AddParent(ITask)\l+ParentSize(): int\l}"
     ]
 
     IDag [
-        label = "{\<\<interface\>\>\nIDag||+AddTask(*ITask)\l+AddEdge(*ITask, *ITask)\l+GetReadyTask(): *ITask\l}"
+        label = "{\<\<interface\>\>\nIDag||+AddTask(ITask)\l+AddEdge(ITask, ITask)\l+GetReadyTask(): ITask\l+State(): T\l}"
     ]
 
     IPool [
@@ -48,11 +46,19 @@ digraph stargo {
     ]
 
     Task [
-        label = "{Task|+Func: F\l+Args: T\l+Parents: ISet\<*ITask\>\l-state: State\l|}"
+        label = "{Task|+Func: F\l+Args: T\l+Parents: ISet\l-state: TaskState\l|}"
+    ]
+
+    TaskState [
+        label = "{\<\<enum\>\>\nTaskState\n|TASK_NOTDONE\lTASK_DONE\lTASK_WRONG\l}"
     ]
 
     Dag [
-        label = "{Dag|-notReadyTaskQueue: IQueue\<*ITask\>\l-readyTaskQueue: IQueue\<*ITask\>\l-nAll: int\l-nDone: int\l-isLocked\l-updateMutex: sync.Mutex\l|-lock()\l-update()\l}"
+        label = "{Dag|-notReadyTaskQueue: IQueue\l-readyTaskQueue: IQueue\l-state: DagState\l-stateMutex: sync.Mutex\l-nAll: int\l-nDone: int\l|-lock()\l-update()\l}"
+    ]
+
+    DagState [
+        label = "{\<\<enum\>\>\nDagState\n|DAG_INIT\lDAG_UPDATING\lDAG_NOTDONE\lDAG_DONE\l}"
     ]
 
     Pool [
@@ -76,9 +82,10 @@ digraph stargo {
     ]
 
     Task -> ISet
+    Task -> TaskState
     Dag -> IQueue
+    Dag -> DagState
     Pool -> IDag 
-    Task -> State
 
     edge [
         style=solid
