@@ -1,27 +1,91 @@
 digraph stargo {
     rankdir=BT
 
+    graph [fontname = "Consolas"];
+    node [fontname = "Consolas"];
+    edge [fontname = "Consolas"];
+
+    node [
+        shape = "note"
+    ]
+
+    note01 [
+        label = "\llanguage: Golang\l\lSymbols:\l+: public\l-: package\lT: interface{}\l"
+    ]
+
     node [
         shape = "record"
     ]
 
+    State 
+
+    IQueue [
+        label = "{\<\<interface\>\>\nIQueue||+Push(T)\l+Pop(): T\l+Empty(): bool\l+Size(): int\l}"
+    ]
+
+    ISet [
+        label = "{\<\<interface\>\>\nISet||+Insert(T)\l+Remove(T)\l+Has(T): bool\l+Empty(): bool\l+Size(): int\l}"
+    ]
+
     ITask [
-        label = "{《interface》\lITask||}"
+        label = "{\<\<interface\>\>\nITask||+Process(): (T, error)\l+State(): T\l}"
     ]
 
     IDag [
-        label = "{《interface》\lIDag||}"
+        label = "{\<\<interface\>\>\nIDag||+AddTask(*ITask)\l+AddEdge(*ITask, *ITask)\l+GetReadyTask(): *ITask\l}"
+    ]
+
+    IPool [
+        label = "{\<\<interface\>\>\nIPool||+Init(int)\l+Bind(*IDag)\l+Process()\l}"
+    ]
+
+    Queue [
+        label = "{Queue|-items: []T\l-mutex: sync.Mutex\l|}"
+    ]
+
+    Set [
+        label = "{Set|-mp: map[T]bool\l-mutex: sync.Mutex\l|}"
     ]
 
     Task [
-        label = "{Task||}"
+        label = "{Task|+Func: F\l+Args: T\l+Parents: ISet\<*ITask\>\l-state: State\l|}"
     ]
 
     Dag [
-        label = "{Dag||}"
+        label = "{Dag|-notReadyTaskQueue: IQueue\<*ITask\>\l-readyTaskQueue: IQueue\<*ITask\>\l-nAll: int\l-nDone: int\l-isLocked\l-updateMutex: sync.Mutex\l|-lock()\l-update()\l}"
     ]
 
-    Task -> ITask [style=dashed arrowhead=empty]
-    Dag -> IDag [style=dashed arrowhead=empty]
+    Pool [
+        label = "{Pool|-dag: *IDag\l|}"
+    ]
+
+    edge [
+        style=dashed 
+        arrowhead=empty
+    ]
+
+    Queue -> IQueue
+    Set -> ISet
+    Task -> ITask 
+    Dag -> IDag 
+    Pool -> IPool
+
+    edge [
+        style=solid
+        arrowhead=vee
+    ]
+
+    Task -> ISet
+    Dag -> IQueue
+    Pool -> IDag 
+    Task -> State
+
+    edge [
+        style=solid
+        arrowhead=odiamond
+    ]
+
+    ITask -> Dag
+
 
 }
