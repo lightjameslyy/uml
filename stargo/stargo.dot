@@ -64,7 +64,7 @@ digraph stargo {
     ]
 
     Pool [
-        label = "{Pool|-workers: int\l-taskChan: chan ITask\l|-createWorker(chan ITask, *sync.WaitGroup)}"
+        label = "{Pool|-workers: int\l-taskChan: chan ITask\l|-createWorker(int, chan ITask, *sync.WaitGroup)}"
     ]
     node [
         shape = "note"
