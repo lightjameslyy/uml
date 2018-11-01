@@ -1,0 +1,13 @@
+digraph dag1 {
+    rankdir = LR
+    graph [fontname = "Inconsolata"];
+    node [fontname = "Inconsolata"];
+    edge [fontname = "Inconsolata"];
+    node [
+        shape = "circle"
+    ]
+    0 -> 1 -> 2 -> 3 -> 6 -> 7
+    2 -> 4 -> 5 -> 6
+    8, 9 -> 5 -> 10
+    11
+}

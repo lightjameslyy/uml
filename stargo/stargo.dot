@@ -1,9 +1,9 @@
 digraph stargo {
     rankdir=BT
 
-    graph [fontname = "Consolas"];
-    node [fontname = "Consolas"];
-    edge [fontname = "Consolas"];
+    graph [fontname = "Inconsolata"];
+    node [fontname = "Inconsolata"];
+    edge [fontname = "Inconsolata"];
 
     node [
         shape = "note"
@@ -22,19 +22,19 @@ digraph stargo {
     ]
 
     ISet [
-        label = "{\<\<interface\>\>\nISet||+Insert(T)\l+Remove(T)\l+Has(T): bool\l+Empty(): bool\l+Size(): int\l}"
+        label = "{\<\<interface\>\>\nISet||+Insert(T)\l+Remove(T)\l+Has(T): bool\l+Empty(): bool\l+Size(): int\l+All(): []T\l}"
     ]
 
     ITask [
-        label = "{\<\<interface\>\>\nITask||+Process(): (T, error)\l+State(): T\l+AddParent(ITask)\l+ParentSize(): int\l}"
+        label = "{\<\<interface\>\>\nITask||+SetFunc(F)\l+SetArgs(T)\l+State(): T\l+AddParent(ITask)\l+ParentSize(): int\l+IsReady(): bool\l+Process(): (T, error)\l}"
     ]
 
     IDag [
-        label = "{\<\<interface\>\>\nIDag||+AddTask(ITask)\l+AddEdge(ITask, ITask)\l+GetReadyTask(): ITask\l+State(): T\l}"
+        label = "{\<\<interface\>\>\nIDag||+AddTask(ITask): error\l+AddEdge(ITask, ITask): error\l+Lock(): error\l+GetReadyTask(): ITask\l+Update(chan ITask)\l+State(): T\l+Size(): int\l}"
     ]
 
     IPool [
-        label = "{\<\<interface\>\>\nIPool||+Init(int)\l+Bind(*IDag)\l+Process()\l}"
+        label = "{\<\<interface\>\>\nIPool||+Init(int)\l+Process(IDag)\l}"
     ]
 
     Queue [
@@ -46,7 +46,7 @@ digraph stargo {
     ]
 
     Task [
-        label = "{Task|+Func: F\l+Args: T\l+Parents: ISet\l-state: TaskState\l|}"
+        label = "{Task|+Func: F\l+Args: T\l-parents: ISet\l-state: TaskState\l|}"
     ]
 
     TaskState [
@@ -54,7 +54,7 @@ digraph stargo {
     ]
 
     Dag [
-        label = "{Dag|-notReadyTaskQueue: IQueue\l-readyTaskQueue: IQueue\l-state: DagState\l-stateMutex: sync.Mutex\l-nAll: int\l-nDone: int\l|-lock()\l-update()\l}"
+        label = "{Dag|-notReadyTaskSet: ISet\l-readyTaskQue0ue: IQueue\l-state: DagState\l-stateMutex: sync.Mutex\l-nAll: int\l-nDone: int\l-locked: bool\l-lockedMutex: sync.Mutesx\l|}"
     ]
 
     DagState [
@@ -62,7 +62,7 @@ digraph stargo {
     ]
 
     Pool [
-        label = "{Pool|-dag: *IDag\l|}"
+        label = "{Pool|-workers: int\l-taskChan: chan ITask\l|-createWorker(chan ITask, *sync.WaitGroup)}"
     ]
 
     edge [
