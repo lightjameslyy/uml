@@ -6,15 +6,9 @@ digraph stargo {
     edge [fontname = "Inconsolata"];
 
     node [
-        shape = "note"
-    ]
-
-    note01 [
-        label = "\llanguage: Golang\l\lSymbols:\l+: public\l-: package\lT: interface{}\lF: func(T) T\l"
-    ]
-
-    node [
         shape = "record"
+        style = "filled"
+        fillcolor = "lightpink"
     ]
 
     IQueue [
@@ -37,6 +31,10 @@ digraph stargo {
         label = "{\<\<interface\>\>\nIPool||+Init(int)\l+Process(IDag)\l}"
     ]
 
+    node [
+        fillcolor = "skyblue"
+    ]
+
     Queue [
         label = "{Queue|-items: []T\l-mutex: sync.Mutex\l|}"
     ]
@@ -49,12 +47,16 @@ digraph stargo {
         label = "{Task|+Func: F\l+Args: T\l-parents: ISet\l-state: TaskState\l|}"
     ]
 
-    TaskState [
-        label = "{\<\<enum\>\>\nTaskState\n|TASK_NOTDONE\lTASK_DONE\lTASK_WRONG\l}"
-    ]
-
     Dag [
         label = "{Dag|-notReadyTaskSet: ISet\l-readyTaskQue0ue: IQueue\l-state: DagState\l-stateMutex: sync.Mutex\l-nAll: int\l-nDone: int\l-locked: bool\l-lockedMutex: sync.Mutesx\l|}"
+    ]
+
+    node [
+        fillcolor = "palegreen"
+    ]
+
+    TaskState [
+        label = "{\<\<enum\>\>\nTaskState\n|TASK_NOTDONE\lTASK_DONE\lTASK_WRONG\l}"
     ]
 
     DagState [
@@ -64,6 +66,15 @@ digraph stargo {
     Pool [
         label = "{Pool|-workers: int\l-taskChan: chan ITask\l|-createWorker(chan ITask, *sync.WaitGroup)}"
     ]
+    node [
+        shape = "note"
+        fillcolor = "lightgray"
+    ]
+
+    note01 [
+        label = "language: Golang\l\lSymbols:\l+: public\l-: package\lT: interface{}\lF: func(T) T\l"
+    ]
+
 
     edge [
         style=dashed 
@@ -85,14 +96,14 @@ digraph stargo {
     Task -> TaskState
     Dag -> IQueue
     Dag -> DagState
-    Pool -> IDag 
+    IPool -> IDag 
 
     edge [
         style=solid
         arrowhead=odiamond
     ]
 
-    ITask -> Dag
+    ITask -> IDag
 
 
 }
