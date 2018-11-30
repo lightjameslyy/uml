@@ -1,0 +1,41 @@
+digraph G {
+        rankdir = BT;
+        graph [fontname = "Inconsolata"];
+        node [fontname = "Inconsolata"];
+        edge [fontname = "Inconsolata"];
+        fontsize = 8
+
+        node [
+                fontsize = 8
+                shape = "record"
+        ]
+
+        edge [
+                fontsize = 8
+        ]
+
+        Animal [
+                label = "{Animal||+ eat()\l+ drink()\l+ run()\l+ sleep()\l}"
+        ]
+
+        Dog [
+                label = "{Dog||+ bark()\l}"
+        ]
+
+        XiaoTianQuan [
+                label = "{XiaoTianQuan||+ fly()\l}"
+        ]
+
+        Cat [
+                label = "{Cat||+ catch()\l}"
+        ]
+
+        edge [
+                arrowhead = "empty"
+        ]
+
+        Dog -> Animal
+        XiaoTianQuan -> Dog
+        Cat -> Animal
+
+}
